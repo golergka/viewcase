@@ -1,0 +1,18 @@
+#!/bin/sh
+set -eu
+
+project_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+swift build --package-path "$project_dir" --product ViewcaseExample
+binary_dir=$(swift build --package-path "$project_dir" --show-bin-path)
+example_app="$project_dir/.build/Viewcase Example.app"
+
+mkdir -p "$example_app/Contents/MacOS" "$example_app/Contents/Resources"
+install -m 755 "$binary_dir/ViewcaseExample" "$example_app/Contents/MacOS/ViewcaseExample"
+plutil -create xml1 "$example_app/Contents/Info.plist"
+plutil -insert CFBundleExecutable -string ViewcaseExample "$example_app/Contents/Info.plist"
+plutil -insert CFBundleIdentifier -string com.golergka.viewcase.example "$example_app/Contents/Info.plist"
+plutil -insert CFBundleName -string "Viewcase Example" "$example_app/Contents/Info.plist"
+plutil -insert CFBundlePackageType -string APPL "$example_app/Contents/Info.plist"
+plutil -insert LSMinimumSystemVersion -string 13.0 "$example_app/Contents/Info.plist"
+
+open -n "$example_app"
