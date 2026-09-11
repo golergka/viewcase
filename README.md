@@ -27,6 +27,7 @@ Each story is an ordinary SwiftUI closure. It can contain bindings, local state,
 - System, large, and accessibility text sizes
 - Responsive, phone, tablet, and desktop canvases
 - Interactive views and one-click state reset
+- Offscreen PNG rendering for agents and CI
 - No third-party or binary dependencies
 
 ## Installation
@@ -44,6 +45,22 @@ Run the included macOS example app:
 ```sh
 Scripts/run-example
 ```
+
+## Render from the command line
+
+Agents and CI can render a registered story directly to a PNG without opening an interactive window or activating the application:
+
+```sh
+Scripts/run-example --list
+Scripts/run-example \
+  --render "Controls/Interactive" \
+  --output /tmp/interactive-dark.png \
+  --appearance dark \
+  --text-size large \
+  --viewport desktop
+```
+
+Use `--size 420x720` for an exact canvas instead of a viewport preset. The renderer constructs the story in an offscreen `NSHostingView`, captures it, writes the requested file, and exits. It never orders a window onto the screen and sets the process activation policy to prohibited.
 
 ## Why use Viewcase?
 

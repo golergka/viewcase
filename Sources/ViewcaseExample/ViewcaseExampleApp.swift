@@ -1,16 +1,31 @@
 #if os(macOS)
+  import Foundation
   import SwiftUI
   import Viewcase
 
   @main struct ViewcaseExampleApp: App {
+    init() {
+      do {
+        if try ViewcaseCLI.run(
+          arguments: Array(CommandLine.arguments.dropFirst()),
+          stories: Self.stories)
+        {
+          exit(0)
+        }
+      } catch {
+        FileHandle.standardError.write(Data((error.localizedDescription + "\n").utf8))
+        exit(2)
+      }
+    }
+
     var body: some Scene {
       WindowGroup("Viewcase Example") {
-        ViewcaseCatalog("Example App", stories: stories)
+        ViewcaseCatalog("Example App", stories: Self.stories)
           .frame(minWidth: 900, minHeight: 680)
       }
     }
 
-    @MainActor private var stories: [ViewcaseStory] {
+    @MainActor private static var stories: [ViewcaseStory] {
       [
         ViewcaseStory("Default", group: "Profile", tags: ["user", "card"]) {
           ProfileCard(name: "Maya Chen", role: "iOS Engineer")

@@ -131,7 +131,7 @@ public struct ViewcaseCatalog: View {
   }
 }
 
-private extension View {
+extension View {
   @ViewBuilder func viewcaseTextSize(_ size: ViewcaseTextSize) -> some View {
     switch size {
     case .system: self

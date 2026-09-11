@@ -15,4 +15,7 @@ plutil -insert CFBundleName -string "Viewcase Example" "$example_app/Contents/In
 plutil -insert CFBundlePackageType -string APPL "$example_app/Contents/Info.plist"
 plutil -insert LSMinimumSystemVersion -string 13.0 "$example_app/Contents/Info.plist"
 
+if [ "$#" -gt 0 ]; then
+  exec "$example_app/Contents/MacOS/ViewcaseExample" "$@"
+fi
 open -n "$example_app"
